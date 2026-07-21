@@ -1,0 +1,16 @@
+name: CI Pipeline - Docker Build Test
+
+on:
+  push:
+    branches: [ "main" ]
+
+jobs:
+  build-test:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Repository auschecken
+      uses: actions/checkout@v3
+
+    - name: Docker Image bauen (Test)
+      run: docker build -t otc-cloud-app .
