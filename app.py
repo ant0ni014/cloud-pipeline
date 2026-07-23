@@ -34,10 +34,10 @@ HTML_TEMPLATE = """<!DOCTYPE html>
                         mono: ['JetBrains Mono', 'monospace']
                     },
                     colors: {
-                        telekom: {
-                            500: '#E20074',
-                            600: '#C70066',
-                            700: '#A10052'
+                        brand: {
+                            500: '#2563eb',
+                            600: '#1d4ed8',
+                            700: '#1e40af'
                         }
                     }
                 }
@@ -50,18 +50,18 @@ HTML_TEMPLATE = """<!DOCTYPE html>
             border: 1px solid rgba(255, 255, 255, 0.08);
         }
         .tab-btn.active {
-            border-bottom: 2px solid #E20074;
+            border-bottom: 2px solid #2563eb;
             color: #ffffff;
             font-weight: 600;
         }
     </style>
 </head>
-<body class="bg-slate-950 text-slate-100 min-h-screen flex flex-col font-sans selection:bg-telekom-500 selection:text-white">
+<body class="bg-slate-950 text-slate-100 min-h-screen flex flex-col font-sans selection:bg-blue-600 selection:text-white">
 
     <!-- Top Navigation Header -->
     <header class="bg-slate-900 border-b border-slate-800 sticky top-0 z-50 px-4 md:px-8 py-3.5 flex justify-between items-center shadow-xl">
         <div class="flex items-center space-x-3">
-            <div class="w-8 h-8 rounded-lg bg-telekom-500 flex items-center justify-center font-bold text-sm text-white font-mono">
+            <div class="w-8 h-8 rounded-lg bg-blue-600 flex items-center justify-center font-bold text-sm text-white font-mono">
                 OTC
             </div>
             <div>
@@ -105,7 +105,7 @@ HTML_TEMPLATE = """<!DOCTYPE html>
                     </p>
                 </div>
                 <div class="flex flex-wrap gap-2 sm:self-start md:self-center">
-                    <button onclick="switchTab('devops')" class="px-4 py-2 bg-telekom-500 hover:bg-telekom-600 text-white text-sm font-semibold rounded transition shadow flex items-center gap-2">
+                    <button onclick="switchTab('devops')" class="px-4 py-2 bg-blue-600 hover:bg-blue-500 text-white text-sm font-semibold rounded transition shadow flex items-center gap-2">
                         <span>Diagnostic Console</span>
                     </button>
                     <a href="/health" target="_blank" class="px-4 py-2 bg-slate-800 hover:bg-slate-700 text-slate-200 text-sm font-semibold rounded border border-slate-700 transition flex items-center gap-2">
@@ -188,7 +188,7 @@ HTML_TEMPLATE = """<!DOCTYPE html>
                         </div>
                         <div class="bg-slate-900 border border-slate-800 p-3.5 rounded-lg">
                             <span class="text-xs text-slate-400 font-medium block">Cloud Ziel</span>
-                            <span class="text-sm font-semibold text-telekom-500 font-mono">OTC ECS</span>
+                            <span class="text-sm font-semibold text-blue-600 font-mono">OTC ECS</span>
                         </div>
                     </div>
                 </div>
@@ -311,42 +311,42 @@ HTML_TEMPLATE = """<!DOCTYPE html>
                                 <td class="p-4 font-bold text-white">/health</td>
                                 <td class="p-4 text-slate-400">Health Check Status & Uptime</td>
                                 <td class="p-4 text-emerald-400">ALB Target Groups</td>
-                                <td class="p-4 text-right"><a href="/health" target="_blank" class="text-telekom-500 hover:underline">Aufrufen</a></td>
+                                <td class="p-4 text-right"><a href="/health" target="_blank" class="text-blue-600 hover:underline">Aufrufen</a></td>
                             </tr>
                             <tr class="hover:bg-slate-900/40">
                                 <td class="p-4"><span class="px-2 py-0.5 rounded bg-slate-800 text-blue-400 border border-slate-700">GET</span></td>
                                 <td class="p-4 font-bold text-white">/api/metrics</td>
                                 <td class="p-4 text-slate-400">Container & OS Metriken</td>
                                 <td class="p-4 text-cyan-400">System Monitoring</td>
-                                <td class="p-4 text-right"><a href="/api/metrics" target="_blank" class="text-telekom-500 hover:underline">Aufrufen</a></td>
+                                <td class="p-4 text-right"><a href="/api/metrics" target="_blank" class="text-blue-600 hover:underline">Aufrufen</a></td>
                             </tr>
                             <tr class="hover:bg-slate-900/40">
                                 <td class="p-4"><span class="px-2 py-0.5 rounded bg-slate-800 text-blue-400 border border-slate-700">GET</span></td>
                                 <td class="p-4 font-bold text-white">/api/load</td>
                                 <td class="p-4 text-slate-400">Simuliert CPU-Last (3s)</td>
                                 <td class="p-4 text-amber-400">Auto-Scaling Tests</td>
-                                <td class="p-4 text-right"><a href="/api/load" target="_blank" class="text-telekom-500 hover:underline">Aufrufen</a></td>
+                                <td class="p-4 text-right"><a href="/api/load" target="_blank" class="text-blue-600 hover:underline">Aufrufen</a></td>
                             </tr>
                             <tr class="hover:bg-slate-900/40">
                                 <td class="p-4"><span class="px-2 py-0.5 rounded bg-slate-800 text-blue-400 border border-slate-700">GET</span></td>
                                 <td class="p-4 font-bold text-white">/api/error</td>
                                 <td class="p-4 text-slate-400">Simuliert HTTP 500 Fehler</td>
                                 <td class="p-4 text-rose-400">Failover Testing</td>
-                                <td class="p-4 text-right"><a href="/api/error" target="_blank" class="text-telekom-500 hover:underline">Aufrufen</a></td>
+                                <td class="p-4 text-right"><a href="/api/error" target="_blank" class="text-blue-600 hover:underline">Aufrufen</a></td>
                             </tr>
                             <tr class="hover:bg-slate-900/40">
                                 <td class="p-4"><span class="px-2 py-0.5 rounded bg-slate-800 text-blue-400 border border-slate-700">GET</span></td>
                                 <td class="p-4 font-bold text-white">/api/env</td>
                                 <td class="p-4 text-slate-400">Liest Environment Variablen aus</td>
                                 <td class="p-4 text-purple-400">Parameter Audit</td>
-                                <td class="p-4 text-right"><a href="/api/env" target="_blank" class="text-telekom-500 hover:underline">Aufrufen</a></td>
+                                <td class="p-4 text-right"><a href="/api/env" target="_blank" class="text-blue-600 hover:underline">Aufrufen</a></td>
                             </tr>
                             <tr class="hover:bg-slate-900/40">
                                 <td class="p-4"><span class="px-2 py-0.5 rounded bg-slate-800 text-blue-400 border border-slate-700">GET</span></td>
                                 <td class="p-4 font-bold text-white">/api/headers</td>
                                 <td class="p-4 text-slate-400">Liest Request Header aus</td>
                                 <td class="p-4 text-indigo-400">Proxy Inspection</td>
-                                <td class="p-4 text-right"><a href="/api/headers" target="_blank" class="text-telekom-500 hover:underline">Aufrufen</a></td>
+                                <td class="p-4 text-right"><a href="/api/headers" target="_blank" class="text-blue-600 hover:underline">Aufrufen</a></td>
                             </tr>
                         </tbody>
                     </table>
@@ -365,7 +365,7 @@ HTML_TEMPLATE = """<!DOCTYPE html>
                 <span class="font-mono text-slate-500">Port 8080 | Python 3.9</span>
             </div>
             <div class="text-slate-400 text-xs font-medium pt-1">
-                Projekt von <span class="text-white font-semibold">Antonio</span> | GitHub: <a href="https://github.com/ant0ni014" target="_blank" rel="noopener noreferrer" class="text-telekom-500 hover:text-telekom-400 font-mono underline transition">github.com/ant0ni014</a>
+                Projekt von <span class="text-white font-semibold">Antonio</span> | GitHub: <a href="https://github.com/ant0ni014" target="_blank" rel="noopener noreferrer" class="text-blue-600 hover:text-blue-400 font-mono underline transition">github.com/ant0ni014</a>
             </div>
         </div>
     </footer>

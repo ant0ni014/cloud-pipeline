@@ -4,7 +4,7 @@ Ein durchgängiges DevOps- & Cloud-Projekt zur automatisierten Bereitstellung ei
 
 ![Status Badge](https://img.shields.io/badge/Status-Healthy-emerald)
 ![Tech Stack Badge](https://img.shields.io/badge/Stack-Python%20%7C%20Docker%20%7C%20Tailwind-blue)
-![Cloud Target Badge](https://img.shields.io/badge/Cloud-T%20Cloud%20Public%20%28ECS%29-magenta)
+![Cloud Target Badge](https://img.shields.io/badge/Cloud-T%20Cloud%20Public%20%28ECS%29-blue)
 
 ## Tech Stack
 * **Language:** Python 3.9 (Standard Library `http.server`)
