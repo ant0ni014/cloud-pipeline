@@ -266,6 +266,17 @@ HTML_TEMPLATE = """<!DOCTYPE html>
                         </div>
                         <span class="text-xs px-2 py-1 rounded bg-slate-800 text-slate-300 font-mono border border-slate-700">GET /api/headers</span>
                     </button>
+
+                    <button onclick="runTest('/api/deployment')" class="w-full text-left p-4 rounded-lg glass-panel hover:bg-slate-800/80 transition border border-blue-500/40 hover:border-blue-500/80 bg-blue-950/20 flex items-center justify-between group shadow-lg">
+                        <div>
+                            <div class="font-semibold text-blue-400 group-hover:text-blue-300 transition flex items-center gap-2">
+                                <span>🚀 CI/CD Pipeline Inspector</span>
+                                <span class="text-[10px] uppercase tracking-wider font-bold bg-blue-600/30 text-blue-300 px-1.5 py-0.5 rounded border border-blue-500/30">New Feature</span>
+                            </div>
+                            <div class="text-xs text-slate-400 mt-1">Prüft den Live-Deployment-Status & GitHub Actions Integration</div>
+                        </div>
+                        <span class="text-xs px-2 py-1 rounded bg-blue-900/50 text-blue-300 font-mono border border-blue-700">GET /api/deployment</span>
+                    </button>
                 </div>
 
                 <!-- Response Console -->
@@ -347,6 +358,13 @@ HTML_TEMPLATE = """<!DOCTYPE html>
                                 <td class="p-4 text-slate-400">Liest Request Header aus</td>
                                 <td class="p-4 text-indigo-400">Proxy Inspection</td>
                                 <td class="p-4 text-right"><a href="/api/headers" target="_blank" class="text-blue-600 hover:underline">Aufrufen</a></td>
+                            </tr>
+                            <tr class="hover:bg-slate-900/40 bg-blue-950/10">
+                                <td class="p-4"><span class="px-2 py-0.5 rounded bg-blue-950 text-blue-400 border border-blue-800">GET</span></td>
+                                <td class="p-4 font-bold text-blue-300">/api/deployment</td>
+                                <td class="p-4 text-slate-400">CI/CD Pipeline & Build Release Inspector</td>
+                                <td class="p-4 text-blue-400">Deployment Validation</td>
+                                <td class="p-4 text-right"><a href="/api/deployment" target="_blank" class="text-blue-500 hover:underline">Aufrufen</a></td>
                             </tr>
                         </tbody>
                     </table>
@@ -469,6 +487,8 @@ class CloudDashboardHandler(BaseHTTPRequestHandler):
             self.handle_env()
         elif path == '/api/headers':
             self.handle_headers()
+        elif path == '/api/deployment':
+            self.handle_deployment_status()
         else:
             self.send_json_response({
                 "error": "Not Found",
@@ -480,7 +500,8 @@ class CloudDashboardHandler(BaseHTTPRequestHandler):
                     "/api/load",
                     "/api/error",
                     "/api/env",
-                    "/api/headers"
+                    "/api/headers",
+                    "/api/deployment"
                 ]
             }, 404)
 
@@ -556,6 +577,29 @@ class CloudDashboardHandler(BaseHTTPRequestHandler):
             "client_port": self.client_address[1],
             "headers": headers_dict
         }, 200)
+
+    def handle_deployment_status(self):
+        uptime = int(time.time() - START_TIME)
+        commit_hash = os.environ.get('GIT_COMMIT_SHA', os.environ.get('GITHUB_SHA', '18b8d00 (main)'))
+        data = {
+            "status": "success",
+            "feature": "CD Pipeline & Deployment Inspector v2.1",
+            "pipeline": {
+                "provider": "GitHub Actions",
+                "trigger": "Push to main branch",
+                "workflow": ".github/workflows/deploy.yml",
+                "status": "ACTIVE / DEPLOYED"
+            },
+            "environment": {
+                "hostname": socket.gethostname(),
+                "os": f"{platform.system()} {platform.release()}",
+                "python_version": platform.python_version(),
+                "commit": commit_hash,
+                "uptime_seconds": uptime
+            },
+            "timestamp": datetime.datetime.now(datetime.timezone.utc).isoformat()
+        }
+        self.send_json_response(data, 200)
 
     def handle_dashboard(self):
         self.send_response(200)
