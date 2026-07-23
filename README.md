@@ -56,3 +56,9 @@ docker run -d -p 8080:8080 --name cloud-dashboard otc-cloud-app
    - Health Check Path: `/health`
 3. ECS Service erstellen und an einen Application Load Balancer (ALB) koppeln.
 4. Den Stresstest (`/api/load`) nutzen, um Alarmierungsregeln in CloudWatch / OTC zu überprüfen.
+
+---
+
+## Author
+
+Projekt von **Antonio** | GitHub: [ant0ni014](https://github.com/ant0ni014)

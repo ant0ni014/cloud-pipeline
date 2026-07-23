@@ -357,13 +357,15 @@ HTML_TEMPLATE = """<!DOCTYPE html>
     </main>
 
     <!-- Footer -->
-    <footer class="bg-slate-900 border-t border-slate-800 text-center py-4 px-4 text-xs text-slate-400">
-        <div class="flex flex-col sm:flex-row justify-between items-center max-w-6xl mx-auto gap-2">
-            <div>
-                Open Telekom Cloud | ECS Container Application
+    <footer class="bg-slate-900 border-t border-slate-800 text-center py-5 px-4 text-xs text-slate-400">
+        <div class="max-w-6xl mx-auto flex flex-col items-center justify-center gap-2">
+            <div class="flex flex-col sm:flex-row items-center justify-center gap-2 sm:gap-4">
+                <span>Open Telekom Cloud | ECS Container Application</span>
+                <span class="hidden sm:inline text-slate-600">•</span>
+                <span class="font-mono text-slate-500">Port 8080 | Python 3.9</span>
             </div>
-            <div class="font-mono text-slate-500">
-                Port 8080 | Python 3.9
+            <div class="text-slate-400 text-xs font-medium pt-1">
+                Projekt von <span class="text-white font-semibold">Antonio</span> | GitHub: <a href="https://github.com/ant0ni014" target="_blank" rel="noopener noreferrer" class="text-telekom-500 hover:text-telekom-400 font-mono underline transition">github.com/ant0ni014</a>
             </div>
         </div>
     </footer>
