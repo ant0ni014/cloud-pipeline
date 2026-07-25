@@ -1,5 +1,5 @@
 """
-Open Telekom Cloud Control & ECS Diagnostic Suite.
+T Cloud Public Control & ECS Diagnostic Suite.
 A lightweight, zero-dependency Python web application for container health monitoring,
 ALB Target Group validation, CPU stress testing, and environment variable inspection.
 """
@@ -20,7 +20,7 @@ HTML_TEMPLATE = """<!DOCTYPE html>
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Open Telekom Cloud Control & ECS Tester</title>
+    <title>T Cloud Public Control & ECS Tester</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -69,7 +69,7 @@ HTML_TEMPLATE = """<!DOCTYPE html>
                     <span class="font-bold text-lg md:text-xl tracking-tight text-white">Cloud Control Console</span>
                     <span class="text-xs px-2 py-0.5 rounded bg-slate-800 text-slate-300 font-mono border border-slate-700">v2.0</span>
                 </div>
-                <p class="text-xs text-slate-400 font-medium hidden sm:block">Open Telekom Cloud Container Diagnostic Suite</p>
+                <p class="text-xs text-slate-400 font-medium hidden sm:block">T Cloud Public Container Diagnostic Suite</p>
             </div>
         </div>
 
@@ -93,7 +93,7 @@ HTML_TEMPLATE = """<!DOCTYPE html>
             <div class="flex flex-col md:flex-row justify-between md:items-center gap-6">
                 <div>
                     <div class="inline-flex items-center gap-2 px-2.5 py-1 rounded bg-slate-800 border border-slate-700 text-xs text-slate-300 font-mono mb-3">
-                        <span>Open Telekom Cloud</span>
+                        <span>T Cloud Public</span>
                         <span class="text-slate-600">/</span>
                         <span>ECS Container Engine</span>
                     </div>
@@ -101,7 +101,7 @@ HTML_TEMPLATE = """<!DOCTYPE html>
                         ECS Container Dashboard & Diagnostic Suite
                     </h1>
                     <p class="text-slate-400 text-sm max-w-2xl">
-                        Bereitgestellt in Docker auf Open Telekom Cloud ECS. Nutzen Sie diese Konsole zur Überprüfung von Health Checks, Auto-Scaling, Failover-Verhalten und Container-Metadaten.
+                        Bereitgestellt in Docker auf T Cloud Public ECS. Nutzen Sie diese Konsole zur Überprüfung von Health Checks, Auto-Scaling, Failover-Verhalten und Container-Metadaten.
                     </p>
                 </div>
                 <div class="flex flex-wrap gap-2 sm:self-start md:self-center">
@@ -199,7 +199,7 @@ HTML_TEMPLATE = """<!DOCTYPE html>
                         <h3 class="text-base font-bold text-white mb-3">Aktive Komponenten</h3>
                         <p class="text-xs text-slate-400 mb-4">Übersicht der konfigurierten Container-Module.</p>
                         <div class="flex flex-wrap gap-2">
-                            <span class="bg-slate-800 text-slate-300 text-xs px-2.5 py-1 rounded border border-slate-700 font-mono">Open Telekom Cloud</span>
+                            <span class="bg-slate-800 text-slate-300 text-xs px-2.5 py-1 rounded border border-slate-700 font-mono">T Cloud Public</span>
                             <span class="bg-slate-800 text-slate-300 text-xs px-2.5 py-1 rounded border border-slate-700 font-mono">Docker Container</span>
                             <span class="bg-slate-800 text-slate-300 text-xs px-2.5 py-1 rounded border border-slate-700 font-mono">Python 3.9 Standard</span>
                             <span class="bg-slate-800 text-slate-300 text-xs px-2.5 py-1 rounded border border-slate-700 font-mono">Tailwind CSS</span>
@@ -378,7 +378,7 @@ HTML_TEMPLATE = """<!DOCTYPE html>
     <footer class="bg-slate-900 border-t border-slate-800 text-center py-5 px-4 text-xs text-slate-400">
         <div class="max-w-6xl mx-auto flex flex-col items-center justify-center gap-2">
             <div class="flex flex-col sm:flex-row items-center justify-center gap-2 sm:gap-4">
-                <span>Open Telekom Cloud | ECS Container Application</span>
+                <span>T Cloud Public | ECS Container Application</span>
                 <span class="hidden sm:inline text-slate-600">•</span>
                 <span class="font-mono text-slate-500">Port 8080 | Python 3.9</span>
             </div>
