@@ -1,0 +1,30 @@
+version: '3.8'
+
+services:
+  web:
+    build: .
+    container_name: webapp
+    restart: always
+    ports:
+      - "127.0.0.1:8080:8080"
+    environment:
+      - DB_HOST=db
+      - DB_NAME=cloud_db
+      - DB_USER=cloud_user
+      - DB_PASSWORD=strenggeheim
+    depends_on:
+      - db
+
+  db:
+    image: postgres:15-alpine
+    container_name: postgres_db
+    restart: always
+    environment:
+      POSTGRES_DB: cloud_db
+      POSTGRES_USER: cloud_user
+      POSTGRES_PASSWORD: strenggeheim
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+volumes:
+  postgres_data:
