@@ -6,11 +6,20 @@ Enterprise container health monitoring, ALB target group validation, CPU load te
 import datetime
 import json
 import os
+import psycopg2
 import platform
 import socket
 import sys
 import time
 from http.server import BaseHTTPRequestHandler, HTTPServer
+
+def get_db_connection():
+    return psycopg2.connect(
+        host=os.environ.get('DB_HOST', 'db'),
+        database=os.environ.get('DB_NAME', 'cloud_db'),
+        user=os.environ.get('DB_USER', 'cloud_user'),
+        password=os.environ.get('DB_PASSWORD', 'strenggeheim')
+    )
 
 START_TIME = time.time()
 
@@ -474,6 +483,8 @@ class CloudDashboardHandler(BaseHTTPRequestHandler):
             self.handle_headers()
         elif path == '/api/deployment':
             self.handle_deployment_status()
+        elif path == '/api/db-test':
+            self.handle_db_test()
         else:
             self.send_json_response({
                 "error": "Not Found",
@@ -489,6 +500,27 @@ class CloudDashboardHandler(BaseHTTPRequestHandler):
                     "/api/deployment"
                 ]
             }, 404)
+
+    def handle_db_test(self):
+        try:
+            conn = get_db_connection()
+            cur = conn.cursor()
+            cur.execute('SELECT version();')
+            db_version = cur.fetchone()[0]
+            cur.close()
+            conn.close()
+            
+            self.send_json_response({
+                "status": "connected",
+                "database": "PostgreSQL",
+                "version": db_version,
+                "timestamp": datetime.datetime.now(datetime.timezone.utc).isoformat()
+            }, 200)
+        except Exception as e:
+            self.send_json_response({
+                "status": "error",
+                "message": f"Datenbank-Verbindungsfehler: {str(e)}"
+            }, 500)
 
     def handle_health(self):
         uptime = int(time.time() - START_TIME)
