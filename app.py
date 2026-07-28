@@ -146,16 +146,22 @@ HTML_TEMPLATE = """<!DOCTYPE html>
         </div>
 
         <!-- Navigation Tabs -->
-        <div class="border-b border-[#1e2333] mb-6 flex space-x-6">
-            <button onclick="switchTab('overview')" id="tab-btn-overview" class="nav-link active pb-2.5 text-xs text-slate-400 hover:text-white transition">
-                Systemübersicht
-            </button>
-            <button onclick="switchTab('diagnostics')" id="tab-btn-diagnostics" class="nav-link pb-2.5 text-xs text-slate-400 hover:text-white transition">
-                Diagnose & Stresstests
-            </button>
-            <button onclick="switchTab('api')" id="tab-btn-api" class="nav-link pb-2.5 text-xs text-slate-400 hover:text-white transition">
-                API Spezifikation
-            </button>
+        <div class="border-b border-[#1e2333] mb-6 flex items-center justify-between">
+            <div class="flex space-x-6">
+                <button onclick="switchTab('overview')" id="tab-btn-overview" class="nav-link active pb-2.5 text-xs text-slate-400 hover:text-white transition">
+                    Systemübersicht
+                </button>
+                <button onclick="switchTab('diagnostics')" id="tab-btn-diagnostics" class="nav-link pb-2.5 text-xs text-slate-400 hover:text-white transition">
+                    Diagnose & Stresstests
+                </button>
+                <button onclick="switchTab('api')" id="tab-btn-api" class="nav-link pb-2.5 text-xs text-slate-400 hover:text-white transition">
+                    API Spezifikation
+                </button>
+                <button onclick="switchTab('minigame')" id="tab-btn-minigame" class="nav-link pb-2.5 text-xs text-slate-400 hover:text-white transition flex items-center gap-1.5">
+                    <span>🎮 T-Rex Runner</span>
+                    <span class="text-[9px] px-1.5 py-0.5 rounded bg-telekom-500/20 text-telekom-500 font-bold border border-telekom-500/30">MINIGAME</span>
+                </button>
+            </div>
         </div>
 
         <!-- Tab 1: System Overview -->
@@ -366,6 +372,40 @@ HTML_TEMPLATE = """<!DOCTYPE html>
                     </table>
                 </div>
             </div>
+        <!-- Tab 4: Minigame (Google Offline Dino Style) -->
+        <div id="tab-minigame" class="tab-content hidden space-y-6">
+            <div class="panel rounded-lg p-6 text-center relative overflow-hidden">
+                <div class="flex flex-col sm:flex-row items-center justify-between border-b border-[#1e2333] pb-4 mb-4 gap-3">
+                    <div class="text-left">
+                        <h3 class="text-lg font-bold text-white flex items-center gap-2">
+                            <span>🦖 Offline Runner - Cloud Edition</span>
+                            <span class="text-xs px-2 py-0.5 rounded bg-amber-500/10 text-amber-400 border border-amber-500/20 font-mono">No Internet Mode</span>
+                        </h3>
+                        <p class="text-xs text-slate-400 mt-0.5">Drücke <kbd class="px-1.5 py-0.5 bg-[#181c28] border border-[#272d40] rounded text-white font-mono text-[11px]">Leertaste</kbd> oder <kbd class="px-1.5 py-0.5 bg-[#181c28] border border-[#272d40] rounded text-white font-mono text-[11px]">Pfeil-Nach-Oben</kbd> / Touch zum Springen & Ausweichen!</p>
+                    </div>
+                    <div class="flex items-center gap-4 font-mono text-xs">
+                        <div class="bg-[#0e1017] px-3 py-1.5 rounded border border-[#1e2333]">
+                            <span class="text-slate-400">Highscore:</span>
+                            <span id="game-highscore" class="text-amber-400 font-bold ml-1">00000</span>
+                        </div>
+                        <div class="bg-[#0e1017] px-3 py-1.5 rounded border border-[#1e2333]">
+                            <span class="text-slate-400">Score:</span>
+                            <span id="game-score" class="text-emerald-400 font-bold ml-1">00000</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="relative w-full flex justify-center items-center bg-[#0a0c13] rounded-lg border border-[#1e2333] p-2 overflow-hidden select-none">
+                    <canvas id="dino-canvas" width="800" height="220" class="w-full max-w-[800px] h-[220px] rounded cursor-pointer"></canvas>
+                    <div id="game-overlay" class="absolute inset-0 bg-[#090a0f]/80 backdrop-blur-sm flex flex-col items-center justify-center gap-3 transition-opacity">
+                        <div id="game-overlay-title" class="text-xl font-bold text-white tracking-wide">Press SPACE or Click to Start</div>
+                        <div class="text-xs text-slate-400">Springe über Kakteen & fliegende Cloud-Drohnen!</div>
+                        <button onclick="startGame()" class="mt-2 px-5 py-2.5 bg-telekom-500 hover:bg-telekom-600 text-white font-semibold text-xs rounded-md shadow-lg transition transform hover:scale-105 active:scale-95">
+                            🎮 Spiel Jetzt Starten
+                        </button>
+                    </div>
+                </div>
+            </div>
         </div>
 
     </main>
@@ -405,7 +445,288 @@ HTML_TEMPLATE = """<!DOCTYPE html>
 
             document.getElementById('tab-' + tabId).classList.remove('hidden');
             document.getElementById('tab-btn-' + tabId).classList.add('active');
+
+            if (tabId === 'minigame') {
+                initGame();
+            }
         }
+
+        /* ----------------------------------------------------
+           DINO RUNNER MINI-GAME LOGIC (GOOGLE OFFLINE STYLE)
+        ---------------------------------------------------- */
+        let canvas, ctx;
+        let gameRunning = false;
+        let animationFrameId;
+        let score = 0;
+        let highscore = localStorage.getItem('t_cloud_dino_highscore') || 0;
+        let gameSpeed = 5;
+        let frameCount = 0;
+
+        const player = {
+            x: 50,
+            y: 150,
+            width: 34,
+            height: 38,
+            velocityY: 0,
+            gravity: 0.6,
+            jumpForce: -11.5,
+            isJumping: false,
+            groundY: 150
+        };
+
+        let obstacles = [];
+        let clouds = [];
+
+        function initGame() {
+            canvas = document.getElementById('dino-canvas');
+            if (!canvas) return;
+            ctx = canvas.getContext('2d');
+            document.getElementById('game-highscore').innerText = String(highscore).padStart(5, '0');
+            drawInitialScene();
+        }
+
+        function drawInitialScene() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            // Ground
+            ctx.strokeStyle = '#272d40';
+            ctx.lineWidth = 2;
+            ctx.beginPath();
+            ctx.moveTo(0, 188);
+            ctx.lineTo(canvas.width, 188);
+            ctx.stroke();
+
+            // Draw player preview
+            drawDino(player.x, player.y);
+        }
+
+        function startGame() {
+            if (gameRunning) return;
+            document.getElementById('game-overlay').classList.add('hidden');
+            gameRunning = true;
+            score = 0;
+            gameSpeed = 5.5;
+            frameCount = 0;
+            obstacles = [];
+            clouds = [];
+            player.y = player.groundY;
+            player.velocityY = 0;
+            player.isJumping = false;
+            
+            // Initial clouds
+            for (let i = 0; i < 3; i++) {
+                clouds.push({
+                    x: Math.random() * canvas.width,
+                    y: 20 + Math.random() * 50,
+                    speed: 0.5 + Math.random() * 0.5
+                });
+            }
+
+            cancelAnimationFrame(animationFrameId);
+            gameLoop();
+        }
+
+        function jump() {
+            if (!gameRunning) {
+                startGame();
+                return;
+            }
+            if (!player.isJumping) {
+                player.velocityY = player.jumpForce;
+                player.isJumping = true;
+            }
+        }
+
+        function spawnObstacle() {
+            const isFlying = Math.random() > 0.7 && score > 150;
+            if (isFlying) {
+                obstacles.push({
+                    x: canvas.width,
+                    y: 110 + Math.random() * 25,
+                    width: 28,
+                    height: 20,
+                    type: 'drone'
+                });
+            } else {
+                const height = 30 + Math.random() * 15;
+                obstacles.push({
+                    x: canvas.width,
+                    y: 188 - height,
+                    width: 18 + Math.random() * 10,
+                    height: height,
+                    type: 'cactus'
+                });
+            }
+        }
+
+        function gameLoop() {
+            if (!gameRunning) return;
+
+            frameCount++;
+            score += 0.15;
+            gameSpeed += 0.0005;
+
+            document.getElementById('game-score').innerText = String(Math.floor(score)).padStart(5, '0');
+
+            // Clear
+            ctx.fillStyle = '#0a0c13';
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+            // Update & Draw Clouds
+            ctx.fillStyle = '#1e2538';
+            clouds.forEach(cloud => {
+                cloud.x -= cloud.speed;
+                if (cloud.x < -60) {
+                    cloud.x = canvas.width + 20;
+                    cloud.y = 20 + Math.random() * 50;
+                }
+                ctx.beginPath();
+                ctx.arc(cloud.x, cloud.y, 14, 0, Math.PI * 2);
+                ctx.arc(cloud.x + 12, cloud.y - 4, 18, 0, Math.PI * 2);
+                ctx.arc(cloud.x + 28, cloud.y, 12, 0, Math.PI * 2);
+                ctx.fill();
+            });
+
+            // Ground line
+            ctx.strokeStyle = '#272d40';
+            ctx.lineWidth = 2;
+            ctx.beginPath();
+            ctx.moveTo(0, 188);
+            ctx.lineTo(canvas.width, 188);
+            ctx.stroke();
+
+            // Ground details
+            ctx.fillStyle = '#333b52';
+            for (let i = 0; i < canvas.width; i += 40) {
+                let gx = (i - (frameCount * gameSpeed) % 40);
+                ctx.fillRect(gx, 192, 12, 2);
+            }
+
+            // Player Physics
+            player.velocityY += player.gravity;
+            player.y += player.velocityY;
+
+            if (player.y >= player.groundY) {
+                player.y = player.groundY;
+                player.velocityY = 0;
+                player.isJumping = false;
+            }
+
+            drawDino(player.x, player.y);
+
+            // Obstacles logic
+            if (frameCount % Math.max(45, Math.floor(100 - gameSpeed * 4)) === 0) {
+                spawnObstacle();
+            }
+
+            for (let i = obstacles.length - 1; i >= 0; i--) {
+                const obs = obstacles[i];
+                obs.x -= gameSpeed;
+
+                // Draw Obstacles
+                if (obs.type === 'cactus') {
+                    ctx.fillStyle = '#e20074';
+                    ctx.fillRect(obs.x, obs.y, obs.width, obs.height);
+                    ctx.fillStyle = '#ff3b99';
+                    ctx.fillRect(obs.x + 3, obs.y + 3, obs.width - 6, obs.height - 6);
+                } else {
+                    // Flying Drone / Bird
+                    ctx.fillStyle = '#38bdf8';
+                    ctx.fillRect(obs.x, obs.y, obs.width, obs.height);
+                    // Wing animation
+                    let wingY = Math.sin(frameCount * 0.3) * 6;
+                    ctx.fillStyle = '#7dd3fc';
+                    ctx.fillRect(obs.x + 6, obs.y - 4 + wingY, 16, 4);
+                }
+
+                // Collision detection
+                if (
+                    player.x < obs.x + obs.width &&
+                    player.x + player.width > obs.x &&
+                    player.y < obs.y + obs.height &&
+                    player.y + player.height > obs.y
+                ) {
+                    gameOver();
+                    return;
+                }
+
+                if (obs.x + obs.width < 0) {
+                    obstacles.splice(i, 1);
+                }
+            }
+
+            animationFrameId = requestAnimationFrame(gameLoop);
+        }
+
+        function drawDino(x, y) {
+            // Stylized Telekom T-Rex / Runner
+            ctx.fillStyle = '#ffffff';
+            // Body
+            ctx.fillRect(x + 10, y + 8, 18, 20);
+            // Head
+            ctx.fillRect(x + 16, y, 16, 12);
+            // Eye
+            ctx.fillStyle = '#090a0f';
+            ctx.fillRect(x + 26, y + 2, 3, 3);
+            // Snout / Nose
+            ctx.fillStyle = '#ffffff';
+            ctx.fillRect(x + 28, y + 6, 6, 6);
+            // Tail
+            ctx.fillRect(x, y + 12, 10, 6);
+            ctx.fillRect(x + 4, y + 18, 8, 4);
+            // Legs animation
+            ctx.fillStyle = '#e20074';
+            if (player.isJumping) {
+                ctx.fillRect(x + 12, y + 28, 4, 10);
+                ctx.fillRect(x + 22, y + 28, 4, 6);
+            } else {
+                let legState = Math.floor(frameCount / 4) % 2;
+                if (legState === 0) {
+                    ctx.fillRect(x + 12, y + 28, 4, 10);
+                    ctx.fillRect(x + 22, y + 28, 4, 6);
+                } else {
+                    ctx.fillRect(x + 12, y + 28, 4, 6);
+                    ctx.fillRect(x + 22, y + 28, 4, 10);
+                }
+            }
+        }
+
+        function gameOver() {
+            gameRunning = false;
+            cancelAnimationFrame(animationFrameId);
+
+            const finalScore = Math.floor(score);
+            if (finalScore > highscore) {
+                highscore = finalScore;
+                localStorage.setItem('t_cloud_dino_highscore', highscore);
+                document.getElementById('game-highscore').innerText = String(highscore).padStart(5, '0');
+            }
+
+            const overlay = document.getElementById('game-overlay');
+            document.getElementById('game-overlay-title').innerText = 'GAME OVER! Score: ' + finalScore;
+            overlay.classList.remove('hidden');
+        }
+
+        // Global Event Listeners for Game Controls
+        window.addEventListener('keydown', (e) => {
+            if (e.code === 'Space' || e.code === 'ArrowUp') {
+                const activeTab = !document.getElementById('tab-minigame').classList.contains('hidden');
+                if (activeTab) {
+                    e.preventDefault();
+                    jump();
+                }
+            }
+        });
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const canvasEl = document.getElementById('dino-canvas');
+            if (canvasEl) {
+                canvasEl.addEventListener('click', jump);
+                canvasEl.addEventListener('touchstart', (e) => {
+                    e.preventDefault();
+                    jump();
+                });
+            }
+        });
 
         async function runTest(endpoint) {
             const output = document.getElementById('console-output');
