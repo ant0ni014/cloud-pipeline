@@ -105,7 +105,10 @@ HTML_TEMPLATE = """<!DOCTYPE html>
                         Instanz-Überwachung und HTTP-Endpoint-Validierung für Elastic Container Services (ECS) und Load Balancer Health-Checks.
                     </p>
                 </div>
-                <div class="flex gap-2">
+                <div class="flex flex-wrap gap-2">
+                    <button onclick="switchTab('minigame')" class="px-3.5 py-2 bg-amber-500 hover:bg-amber-600 text-slate-950 font-bold text-xs rounded transition flex items-center gap-1.5 shadow-md transform hover:scale-105 active:scale-95">
+                        <span>🎮 T-Rex Runner Spielen</span>
+                    </button>
                     <button onclick="switchTab('diagnostics')" class="px-3.5 py-2 bg-telekom-500 hover:bg-telekom-600 text-white text-xs font-semibold rounded transition flex items-center gap-1.5 shadow-sm">
                         <span>Diagnose starten</span>
                     </button>
@@ -372,6 +375,8 @@ HTML_TEMPLATE = """<!DOCTYPE html>
                     </table>
                 </div>
             </div>
+        </div>
+
         <!-- Tab 4: Minigame (Google Offline Dino Style) -->
         <div id="tab-minigame" class="tab-content hidden space-y-6">
             <div class="panel rounded-lg p-6 text-center relative overflow-hidden">
@@ -718,6 +723,7 @@ HTML_TEMPLATE = """<!DOCTYPE html>
         });
 
         document.addEventListener('DOMContentLoaded', () => {
+            initGame();
             const canvasEl = document.getElementById('dino-canvas');
             if (canvasEl) {
                 canvasEl.addEventListener('click', jump);
