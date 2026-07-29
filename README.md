@@ -51,7 +51,7 @@ docker run -d -p 8080:8080 --name cloud-dashboard otc-cloud-app
 ## Deployment auf ECS (Elastic Container Service)
 
 1. Image in die Container Registry pushen (z. B. OTC SWR / AWS ECR).
-2. Task Definition erstellen:
+2. Task Definition erstellen
    - Port Mapping: `8080:8080`
    - Health Check Path: `/health`
 3. ECS Service erstellen und an einen Application Load Balancer (ALB) koppeln.
